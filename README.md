@@ -1,50 +1,42 @@
-# React + TypeScript + Vite
+# Mini Map Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+Mini Map Application is a single-page application built with React, TypeScript, and Tailwind CSS. It integrates with OpenStreetMap and allows users to interact with points of interest displayed on the map. Users can view and update the status and comments associated with each point.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- **Interactive Map**: Utilize OpenStreetMap to display locations.
+- **Zoom In/Out**: Easily navigate the map with zoom buttons for both desktop and mobile layouts.
+- **Data Points**: Show points from sample data with different statuses.
+- **Status and Comments**: Click on points to view and change their status and comments.
+- **Offline Functionality**: The app works in offline mode and remembers changes.
+- **Responsive Design**: The interface is adaptive for mobile and desktop views.
+- **PWA Support**: (Advanced feature) Supports Progressive Web App capabilities for offline use.
+- **End-to-End Testing**: (Advanced feature) Includes an E2E test suite.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Technologies Used
 
-- Configure the top-level `parserOptions` property like this:
+- **React**: Front-end library for building user interfaces.
+- **TypeScript**: A typed superset of JavaScript that compiles to plain JavaScript.
+- **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
+- **OpenLayers**: Library for displaying maps and handling geospatial data.
+- **Cypress**: Testing framework for end-to-end testing.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Installation
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/javy99/mini-map-app.git
+   cd mini-map-app
+   ```
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+2. Install dependencies:
+  ```bash
+  npm install
+  ```
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+3. Run the application:
+  ```bash
+  npm run dev
+  ```

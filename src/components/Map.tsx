@@ -4,23 +4,40 @@ import "ol/ol.css";
 import { fromLonLat } from "ol/proj";
 import { OSM } from "ol/source";
 import { useEffect, useRef, useState } from "react";
-import { Coordinate, sampleData } from "../utils";
+import { Coordinate } from "../utils";
 import Marker from "./Marker";
 import ZoomControls from "./ZoomControls";
 
-const Map: React.FC = () => {
+interface Props {
+  coordinates: Coordinate[];
+  onStatusChange: (index: number, newStatus: boolean) => void;
+  onDetailsChange: (index: number, newDetails: string) => void;
+  isOffline: boolean;
+}
+
+const Map: React.FC<Props> = ({
+  coordinates,
+  onStatusChange,
+  onDetailsChange,
+  isOffline,
+}) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<OlMap | null>(null);
-  const [coordinates, setCoordinates] = useState<Coordinate[]>(sampleData);
 
   useEffect(() => {
     if (!mapRef.current) return;
+
+    const osmSource = new OSM({
+      url: isOffline
+        ? undefined
+        : "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    });
 
     const initialMap = new OlMap({
       controls: [],
       layers: [
         new TileLayer({
-          source: new OSM(),
+          source: osmSource,
         }),
       ],
       target: mapRef.current,
@@ -33,23 +50,7 @@ const Map: React.FC = () => {
     setMap(initialMap);
 
     return () => initialMap.setTarget(undefined);
-  }, []);
-
-  const handleStatusChange = (index: number, newStatus: boolean) => {
-    setCoordinates((prev) =>
-      prev.map((coordinates, i) =>
-        i === index ? { ...coordinates, status: newStatus } : coordinates
-      )
-    );
-  };
-
-  const handleDetailsChange = (index: number, newDetails: string) => {
-    setCoordinates((prev) =>
-      prev.map((coordinates, i) =>
-        i === index ? { ...coordinates, details: newDetails } : coordinates
-      )
-    );
-  };
+  }, [isOffline]);
 
   return (
     <div ref={mapRef} className="w-full h-full">
@@ -63,11 +64,9 @@ const Map: React.FC = () => {
               latitude={coordinate.latitude}
               status={coordinate.status}
               details={coordinate.details}
-              onStatusChange={(newStatus) =>
-                handleStatusChange(index, newStatus)
-              }
+              onStatusChange={(newStatus) => onStatusChange(index, newStatus)}
               onDetailsChange={(newDetails) =>
-                handleDetailsChange(index, newDetails)
+                onDetailsChange(index, newDetails)
               }
             />
           ))}

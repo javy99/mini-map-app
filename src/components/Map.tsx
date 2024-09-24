@@ -4,8 +4,9 @@ import "ol/ol.css";
 import { fromLonLat } from "ol/proj";
 import { OSM } from "ol/source";
 import { useEffect, useRef, useState } from "react";
-import Marker from "./Marker";
 import { Coordinate, sampleData } from "../utils";
+import Marker from "./Marker";
+import ZoomControls from "./ZoomControls";
 
 const Map: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -16,6 +17,7 @@ const Map: React.FC = () => {
     if (!mapRef.current) return;
 
     const initialMap = new OlMap({
+      controls: [],
       layers: [
         new TileLayer({
           source: new OSM(),
@@ -51,21 +53,27 @@ const Map: React.FC = () => {
 
   return (
     <div ref={mapRef} className="w-full h-full">
-      {map &&
-        coordinates.map((coordinate, index) => (
-          <Marker
-            key={index}
-            map={map}
-            longitude={coordinate.longitude}
-            latitude={coordinate.latitude}
-            status={coordinate.status}
-            details={coordinate.details}
-            onStatusChange={(newStatus) => handleStatusChange(index, newStatus)}
-            onDetailsChange={(newDetails) =>
-              handleDetailsChange(index, newDetails)
-            }
-          />
-        ))}
+      {map && (
+        <>
+          {coordinates.map((coordinate, index) => (
+            <Marker
+              key={index}
+              map={map}
+              longitude={coordinate.longitude}
+              latitude={coordinate.latitude}
+              status={coordinate.status}
+              details={coordinate.details}
+              onStatusChange={(newStatus) =>
+                handleStatusChange(index, newStatus)
+              }
+              onDetailsChange={(newDetails) =>
+                handleDetailsChange(index, newDetails)
+              }
+            />
+          ))}
+          <ZoomControls map={map} />
+        </>
+      )}
     </div>
   );
 };

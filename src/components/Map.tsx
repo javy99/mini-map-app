@@ -2,9 +2,9 @@ import { Map as OlMap, View } from "ol";
 import TileLayer from "ol/layer/Tile";
 import "ol/ol.css";
 import { fromLonLat } from "ol/proj";
-import { OSM } from "ol/source";
+import { OSM, XYZ } from "ol/source";
 import { useEffect, useRef, useState } from "react";
-import { Coordinate } from "../utils";
+import { Coordinate, IndexedDBTileCache } from "../utils";
 import Marker from "./Marker";
 import ZoomControls from "./ZoomControls";
 
@@ -27,17 +27,33 @@ const Map: React.FC<Props> = ({
   useEffect(() => {
     if (!mapRef.current) return;
 
-    const osmSource = new OSM({
-      url: isOffline
-        ? undefined
-        : "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    const customTileLoadFunction = async (imageTile: any, src: string) => {
+      if (isOffline) {
+        const cachedTile = await IndexedDBTileCache.getTile(src);
+        if (cachedTile) {
+          imageTile.getImage().src = URL.createObjectURL(cachedTile);
+          return;
+        }
+      }
+
+      imageTile.getImage().src = src;
+      if (!isOffline) {
+        fetch(src)
+          .then((response) => response.blob())
+          .then((blob) => IndexedDBTileCache.setTile(src, blob));
+      }
+    };
+
+    const tileSource = new XYZ({
+      url: "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      tileLoadFunction: customTileLoadFunction,
     });
 
     const initialMap = new OlMap({
       controls: [],
       layers: [
         new TileLayer({
-          source: osmSource,
+          source: tileSource,
         }),
       ],
       target: mapRef.current,

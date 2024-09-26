@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Map from "./components/Map";
 import useLocalStorage from "./hooks/useLocalStorage";
 import useOfflineStatus from "./hooks/useOfflineStatus";
@@ -32,6 +32,21 @@ const App: React.FC = () => {
       window.location.reload();
     }
   };
+
+  const syncData = async () => {
+    // This is where you would implement your sync logic
+    // For example, sending any changes made while offline to your server
+    console.log("Syncing data...");
+    // Simulating an API call
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    console.log("Data synced successfully");
+  };
+
+  useEffect(() => {
+    if (!isOffline) {
+      syncData();
+    }
+  }, [isOffline]);
 
   return (
     <div className="h-screen flex flex-col">

@@ -1,5 +1,10 @@
 const CACHE_NAME = "map-app-cache-v1";
-const urlsToCache = [];
+const urlsToCache = [
+  "/",
+  "/index.html",
+  "/assets/index-CUGwacT1.js",
+  "/assets/index-DtS7RPCm.css",
+];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -7,7 +12,6 @@ self.addEventListener("install", (event) => {
       console.log("Opened cache");
       return cache.addAll(urlsToCache).catch((error) => {
         console.error("Failed to cache some resources:", error);
-        // Continue with installation even if some resources fail to cache
       });
     })
   );
@@ -34,14 +38,16 @@ self.addEventListener("fetch", (event) => {
           const responseToCache = response.clone();
 
           caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
+            if (event.request.url.includes("/assets/")) {
+              cache.put(event.request, responseToCache);
+            }
           });
 
           return response;
         })
         .catch(() => {
           // If fetch fails (e.g., offline), return a custom offline page or fallback content
-          return caches.match("/offline.html");
+          return caches.match("/index.html");
         });
     })
   );

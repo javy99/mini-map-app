@@ -33,20 +33,20 @@ const App: React.FC = () => {
     }
   };
 
-  const syncData = async () => {
-    // This is where you would implement your sync logic
-    // For example, sending any changes made while offline to your server
-    console.log("Syncing data...");
-    // Simulating an API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log("Data synced successfully");
-  };
+  // const syncData = async () => {
+  //   // This is where you would implement your sync logic
+  //   // For example, sending any changes made while offline to your server
+  //   console.log("Syncing data...");
+  //   // Simulating an API call
+  //   await new Promise((resolve) => setTimeout(resolve, 1000));
+  //   console.log("Data synced successfully");
+  // };
 
-  useEffect(() => {
-    if (!isOffline) {
-      syncData();
-    }
-  }, [isOffline]);
+  // useEffect(() => {
+  //   if (!isOffline) {
+  //     syncData();
+  //   }
+  // }, [isOffline]);
 
   return (
     <div className="h-screen flex flex-col">

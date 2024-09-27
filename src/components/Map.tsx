@@ -2,7 +2,7 @@ import { Map as OlMap, View } from "ol";
 import TileLayer from "ol/layer/Tile";
 import "ol/ol.css";
 import { fromLonLat } from "ol/proj";
-import { OSM, XYZ } from "ol/source";
+import { XYZ } from "ol/source";
 import { useEffect, useRef, useState } from "react";
 import { Coordinate, IndexedDBTileCache } from "../utils";
 import Marker from "./Marker";

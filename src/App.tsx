@@ -36,7 +36,9 @@ const App: React.FC = () => {
   return (
     <div className="h-screen flex flex-col">
       <header className="bg-black text-white p-4">
-        <h1 className="text-2xl font-bold">Interactive Map Application</h1>
+        <h1 data-testid="cypress-title" className="text-2xl font-bold">
+          Interactive Map Application
+        </h1>
         {isOffline && (
           <div className="bg-yellow-500 text-black px-2 py-1 rounded mt-2">
             You are currently offline. Changes will be saved locally.

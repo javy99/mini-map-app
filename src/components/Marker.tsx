@@ -3,11 +3,11 @@ import { Point } from "ol/geom";
 import VectorLayer from "ol/layer/Vector";
 import { fromLonLat } from "ol/proj";
 import VectorSource from "ol/source/Vector";
-import CircleStyle from "ol/style/Circle";
-import Fill from "ol/style/Fill";
-import Stroke from "ol/style/Stroke";
+import Icon from "ol/style/Icon";
 import Style from "ol/style/Style";
 import { useEffect, useState } from "react";
+import active from "../../public/active.svg";
+import inactive from "../../public/inactive.svg";
 import MarkerPopup from "./MarkerPopup";
 
 interface Props {
@@ -37,10 +37,9 @@ const Marker: React.FC<Props> = ({
     });
 
     const markerStyle = new Style({
-      image: new CircleStyle({
-        radius: 8,
-        fill: new Fill({ color: status ? "green" : "red" }),
-        stroke: new Stroke({ color: "white", width: 2 }),
+      image: new Icon({
+        src: status ? active : inactive,
+        scale: 0.04,
       }),
     });
 
@@ -63,6 +62,12 @@ const Marker: React.FC<Props> = ({
         }
       });
     };
+
+    map.on("pointermove", (event) => {
+      const pixel = map.getEventPixel(event.originalEvent);
+      const hit = map.hasFeatureAtPixel(pixel);
+      map.getTargetElement().style.cursor = hit ? "pointer" : "";
+    });
 
     map.on("click", handleClick);
 

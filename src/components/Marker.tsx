@@ -5,10 +5,17 @@ import { fromLonLat } from "ol/proj";
 import VectorSource from "ol/source/Vector";
 import Icon from "ol/style/Icon";
 import Style from "ol/style/Style";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import active from "../../public/active.svg";
 import inactive from "../../public/inactive.svg";
 import MarkerPopup from "./MarkerPopup";
+import BaseEvent from "ol/events/Event";
+
+// Create a global state to manage open popups
+let openPopup: Feature | null = null;
+
+// Create a symbol for our custom event
+const CLOSE_POPUP_EVENT = Symbol("closePopup");
 
 interface Props {
   map: Map;
@@ -30,6 +37,11 @@ const Marker: React.FC<Props> = ({
   onStatusChange,
 }) => {
   const [showPopup, setShowPopup] = useState(false);
+
+  const closePopup = useCallback(() => {
+    setShowPopup(false);
+    openPopup = null;
+  }, []);
 
   useEffect(() => {
     const marker = new Feature({
@@ -58,8 +70,15 @@ const Marker: React.FC<Props> = ({
     const handleClick = (event: any) => {
       map.forEachFeatureAtPixel(event.pixel, (feature) => {
         if (feature === marker) {
+          if (openPopup && openPopup !== marker) {
+            // Close the previously open popup
+            map.dispatchEvent(new BaseEvent(CLOSE_POPUP_EVENT as any));
+          }
           setShowPopup(true);
+          openPopup = marker;
+          return true; // Stop iterating
         }
+        return false;
       });
     };
 
@@ -71,11 +90,20 @@ const Marker: React.FC<Props> = ({
 
     map.on("click", handleClick);
 
+    // Add listener for closing popups
+    const closePopupListener = (e: BaseEvent) => {
+      if (openPopup === marker) {
+        closePopup();
+      }
+    };
+    map.on(CLOSE_POPUP_EVENT as any, closePopupListener);
+
     return () => {
       map.removeLayer(vectorLayer);
       map.un("click", handleClick);
+      map.un(CLOSE_POPUP_EVENT as any, closePopupListener);
     };
-  }, [map, longitude, latitude, status]);
+  }, [map, longitude, latitude, status, closePopup]);
 
   return (
     showPopup && (
@@ -86,7 +114,7 @@ const Marker: React.FC<Props> = ({
         details={details}
         onStatusChange={onStatusChange}
         onDetailsChange={onDetailsChange}
-        onClose={() => setShowPopup(false)}
+        onClose={closePopup}
       />
     )
   );

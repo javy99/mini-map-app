@@ -40,3 +40,16 @@ Mini Map Application is a single-page application built with React, TypeScript, 
   ```bash
   npm run dev
   ```
+
+4. Build the application for production:
+  ```bash
+  npm run build
+  ```
+
+## Application Screenshots
+
+### Main Map View
+![Main Map View](./screenshots/image.png)
+
+### Status Editing
+![Status Editing](./screenshots//image1.png)

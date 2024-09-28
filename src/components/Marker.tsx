@@ -1,20 +1,18 @@
 import { Feature, Map } from "ol";
+import BaseEvent from "ol/events/Event";
 import { Point } from "ol/geom";
 import VectorLayer from "ol/layer/Vector";
 import { fromLonLat } from "ol/proj";
 import VectorSource from "ol/source/Vector";
 import Icon from "ol/style/Icon";
 import Style from "ol/style/Style";
-import { useEffect, useState, useCallback } from "react";
-import active from "../../public/active.svg";
-import inactive from "../../public/inactive.svg";
+import { useCallback, useEffect, useState } from "react";
+import active from "/active.svg";
+import inactive from "/inactive.svg";
 import MarkerPopup from "./MarkerPopup";
-import BaseEvent from "ol/events/Event";
 
-// Create a global state to manage open popups
 let openPopup: Feature | null = null;
 
-// Create a symbol for our custom event
 const CLOSE_POPUP_EVENT = Symbol("closePopup");
 
 interface Props {
@@ -71,12 +69,11 @@ const Marker: React.FC<Props> = ({
       map.forEachFeatureAtPixel(event.pixel, (feature) => {
         if (feature === marker) {
           if (openPopup && openPopup !== marker) {
-            // Close the previously open popup
             map.dispatchEvent(new BaseEvent(CLOSE_POPUP_EVENT as any));
           }
           setShowPopup(true);
           openPopup = marker;
-          return true; // Stop iterating
+          return true;
         }
         return false;
       });
@@ -90,8 +87,7 @@ const Marker: React.FC<Props> = ({
 
     map.on("click", handleClick);
 
-    // Add listener for closing popups
-    const closePopupListener = (e: BaseEvent) => {
+    const closePopupListener = () => {
       if (openPopup === marker) {
         closePopup();
       }

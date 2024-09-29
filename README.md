@@ -12,8 +12,8 @@ Mini Map Application is a single-page application built with React, TypeScript, 
 - **Status and Comments**: Click on points to view and change their status and comments.
 - **Offline Functionality**: The app works in offline mode and remembers changes.
 - **Responsive Design**: The interface is adaptive for mobile and desktop views.
-- **PWA Support**: (Advanced feature) Supports Progressive Web App capabilities for offline use.
-- **End-to-End Testing**: (Advanced feature) Includes an E2E test suite.
+- **PWA Support**: Supports Progressive Web App capabilities for offline use.
+- **End-to-End Testing**: Includes an E2E test suite.
 
 ## Technologies Used
 
@@ -26,30 +26,40 @@ Mini Map Application is a single-page application built with React, TypeScript, 
 ## Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/javy99/mini-map-app.git
    cd mini-map-app
    ```
 
 2. Install dependencies:
-  ```bash
-  npm install
-  ```
+
+```bash
+npm install
+```
 
 3. Run the application:
-  ```bash
-  npm run dev
-  ```
+
+```bash
+npm run dev
+```
 
 4. Build the application for production:
-  ```bash
-  npm run build
-  ```
+
+```bash
+npm run build
+```
+
+## Demo
+
+Explore the live demo of the application at [https://mini-map-app.vercel.app/](https://mini-map-app.vercel.app/).
 
 ## Application Screenshots
 
 ### Main Map View
+
 ![Main Map View](./screenshots/image.png)
 
 ### Status Editing
+
 ![Status Editing](./screenshots//image1.png)
